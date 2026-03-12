@@ -1,43 +1,35 @@
-class Item:
-    def __init__(self, name:str, price:int, weight:float):
-        self.__name = name
-        self.__price = price
-        self.__weight = weight
-
-    def get_name(self) -> str:
-        return self.__name
-
-    def get_price(self) -> int:
-        return self.__price
-
-    def get_weight(self) -> float:
-        return self.__weight
-
-    def get_cost(self) -> float:
-        return self.__price / self.__weight
-
-def knapsack(amount:float, itemList:list):
-    print(f"Knapsack Size: {amount} kg")
-    print("===============================")
-    sorted_item = sorted(itemList, key=lambda x: x.get_cost(),reverse=True)
+def coinExchange(amount, coins):
+    print(f"Amount {amount}")
     total = 0
-    remainding_cap = amount
+    remainding_amount = amount
+    value = sorted(coins.keys(), reverse=True)
+    used_coin = {i:0 for i in value}
 
-    for i in sorted_item:
-        if i.get_weight() <= remainding_cap:
-            print(f"{i.get_name()} -> {i.get_weight()} kg -> {i.get_price()} THB")
-            total += i.get_price()
-            remainding_cap -= i.get_weight()
-    print(f"Total: {total} THB")
+    for i in value:
+        if remainding_amount <= 0:
+            break
+        need = remainding_amount // i
+        use = min(need, coins[i])
+        used_coin[i] = use
+        remainding_amount -= (use * i)
+        total += use
+
+    if remainding_amount > 0:
+        print("Coins are not enough.")
+    else:
+        print("Coin exchange result:")
+        for i in value:
+            print(f"  {i} baht = {used_coin[i]} coins")
+        print(f"Number of coins: {total}")
+
+def convert_key(data):
+  """JSON"""
+  return {int(k): v for k, v in data.items()}
 
 def main():
     import json
-    items = []
-    num_items = int(input())
-    while num_items != 0:
-        item_in = json.loads(input())
-        items.append(Item(item_in['name'], item_in['price'], item_in['weight']))
-        num_items = num_items - 1
-    knapsack_capacity = float(input())
-    knapsack(knapsack_capacity,items)
+    money = int(input())
+    data = convert_key(json.loads(input()))
+    coinExchange(money,data)
+
 main()

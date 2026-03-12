@@ -1,5 +1,3 @@
-import json
-
 def findStations(stations,needed_cities):
     states_needed = set(needed_cities)
     final_stations = []
@@ -26,6 +24,7 @@ def findStations(stations,needed_cities):
     return sorted(final_stations)
 
 def main():
+    import json
     needed_cities = json.loads(input())
 
     num_stations = int(input())
